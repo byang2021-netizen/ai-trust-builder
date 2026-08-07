@@ -1,205 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>AI Trust Builder</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>AI Trust Builder | Faculty Conversation Simulator</title>
 
     <link rel="stylesheet" href="style.css">
-
 </head>
-
 
 <body>
 
-
-<header class="app-header">
-
-    <div class="brand">
-
-        <div class="logo-icon">
-            ◆
-        </div>
-
-        <div>
-
-            <div class="logo-title">
-                AI Trust Builder
-            </div>
-
-            <div class="logo-subtitle">
-                Faculty Conversation Simulator
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="trust-meter">
+    <!-- Trust Meter -->
+    <aside class="trust-meter" id="trustMeter">
 
         <div class="trust-label">
-            Trust Level
+            <span>Trust Journey</span>
+            <span id="trustStatus">🌱 Starting</span>
         </div>
 
-        <div class="trust-status" id="trustStatus">
-            🌱 Starting
-        </div>
-
-        <div class="trust-progress">
-
+        <div class="trust-bar">
             <div class="trust-fill" id="trustFill"></div>
-
         </div>
 
-    </div>
+        <div class="trust-score">
+            <span id="trustScore">0</span>
+            <span class="trust-divider">/</span>
+            <span id="maxTrustDisplay">30</span>
+        </div>
 
+    </aside>
 
-</header>
 
+    <!-- Landing Page -->
+    <main id="landing" class="landing-page">
 
+        <nav class="top-nav">
 
+            <div class="brand">
 
-<main class="container">
+                <div class="brand-mark">
+                    ✦
+                </div>
 
+                <div>
+                    <div class="brand-name">
+                        AI Trust Builder
+                    </div>
 
-<section class="hero" id="landing">
+                    <div class="brand-subtitle">
+                        Faculty Conversation Simulator
+                    </div>
+                </div>
 
+            </div>
 
-    <h1>
-        Practice AI Conversations with Faculty
-    </h1>
+        </nav>
 
 
-    <p class="description">
+        <section class="hero">
 
-        Explore how listening first, partnering with subject matter experts,
-        and using thoughtful AI conversations can strengthen trust in
-        instructional design partnerships.
+            <div class="hero-content">
 
-    </p>
+                <div class="eyebrow">
+                    INTERACTIVE ID TRAINING
+                </div>
 
+                <h1>
+                    Build Trust.<br>
+                    Strengthen Partnerships.
+                </h1>
 
-    <button id="startBtn">
+                <p class="hero-description">
+                    Practice real conversations with faculty to introduce AI
+                    in ways that build trust, respect expertise, and foster
+                    collaboration.
+                </p>
 
-        Start Your First Conversation
+                <button id="startBtn" class="primary-btn">
+                    <span>✦</span>
+                    Start Simulation
+                    <span class="btn-arrow">→</span>
+                </button>
 
-    </button>
+            </div>
 
+            <div class="hero-decoration">
 
-</section>
+                <div class="glow-circle"></div>
 
+                <div class="building-shape">
+                    <span>GW</span>
+                </div>
 
+            </div>
 
+        </section>
 
 
-<section class="accordion-section">
+        <section class="learning-info">
 
+            <details class="info-item">
 
-<details>
+                <summary>
 
-<summary>
-💬 What You'll Practice
-</summary>
+                    <div class="info-icon">
+                        ◯
+                    </div>
 
+                    <div class="info-text">
 
-<ul>
+                        <strong>What You'll Practice</strong>
 
-<li>
-Practice active listening before offering solutions.
-</li>
+                        <span>
+                            Navigate common faculty concerns and build trust
+                            through thoughtful, collaborative responses.
+                        </span>
 
-<li>
-Understand faculty concerns about AI.
-</li>
+                    </div>
 
-<li>
-Build collaborative relationships with SMEs.
-</li>
+                    <span class="summary-arrow">⌄</span>
 
-<li>
-Use AI as a design partner instead of a replacement.
-</li>
+                </summary>
 
-</ul>
+                <div class="info-content">
 
+                    You'll practice listening before solving, respecting
+                    faculty expertise, and positioning AI as a collaborative
+                    tool rather than a replacement for faculty judgment.
 
-</details>
+                </div>
 
+            </details>
 
 
+            <details class="info-item">
 
+                <summary>
 
-<details>
+                    <div class="info-icon">
+                        ◈
+                    </div>
 
-<summary>
-🚀 How It Works
-</summary>
+                    <div class="info-text">
 
+                        <strong>How It Works</strong>
 
-<ol>
+                        <span>
+                            Explore response options, see their impact on
+                            trust, and learn from coaching insights.
+                        </span>
 
-<li>
-Read a faculty concern.
-</li>
+                    </div>
 
-<li>
-Choose your response.
-</li>
+                    <span class="summary-arrow">⌄</span>
 
-<li>
-Receive coaching feedback.
-</li>
+                </summary>
 
-<li>
-Build trust through conversation.
-</li>
+                <div class="info-content">
 
-<li>
-Complete multiple scenarios.
-</li>
+                    You'll move through three conversation scenarios.
+                    Explore different responses, receive immediate coaching
+                    feedback, and watch your Trust Journey change as you
+                    make your choices.
 
-</ol>
+                </div>
 
+            </details>
 
-</details>
+        </section>
 
 
-</section>
+        <footer class="landing-footer">
+            AI Trust Builder · Instructional Design Training
+        </footer>
 
+    </main>
 
 
+    <!-- Simulation -->
+    <main id="app" class="simulation-page"></main>
 
 
-<section id="app"></section>
-
-
-</main>
-
-
-
-
-<footer>
-
-Every conversation is an opportunity to build trust.
-
-</footer>
-
-
-
-
-<script src="data.js"></script>
-<script src="script.js"></script>
-
+    <script src="data.js"></script>
+    <script src="script.js"></script>
 
 </body>
-
 </html>
