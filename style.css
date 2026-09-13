@@ -854,3 +854,14 @@ footer {
 .journey-dot.active {
     cursor: default;
 }
+/* Keep the explored check mark inside the circle */
+
+.choice.explored::before {
+    content: "✓";
+    background: var(--sage-soft);
+    color: var(--sage);
+}
+
+.choice.explored {
+    border-color: var(--sage);
+}
