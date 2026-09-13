@@ -828,3 +828,29 @@ footer {
     border-color:var(--green);
 
 }
+
+
+/* Clickable scenario navigation */
+
+.journey-dot {
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.journey-dot:hover {
+    transform: scale(1.08);
+}
+
+.journey-dot:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 4px;
+}
+
+.journey-dot.active {
+    cursor: default;
+}
