@@ -105,7 +105,7 @@ function loadScenario() {
 
             <p>
 
-                "${scenario.message}"
+                ${scenario.message}
 
             </p>
 
@@ -257,9 +257,7 @@ function selectChoice(choiceIndex) {
     }
 
 
-    selectedButton.innerHTML =
-
-        "✓ Explored: " + choice.text;
+    selectedButton.classList.add("explored");
 
 
     showFeedback(choice);
