@@ -1,3 +1,4 @@
+
 const startBtn = document.getElementById("startBtn");
 
 const landing = document.getElementById("landing");
@@ -10,6 +11,7 @@ const app = document.getElementById("app");
 let currentScenario = 0;
 
 let trustScore = 0;
+
 const maxTrust = scenarios.reduce((total, scenario) => {
 
     return total +
@@ -18,46 +20,44 @@ const maxTrust = scenarios.reduce((total, scenario) => {
 
 }, 0);
 
-let exploredChoices = [];
+
+// Track explored answers separately for each scenario.
+// This prevents the same answer from adding trust again
+// when the learner returns to a scenario.
+
+let exploredChoicesByScenario = scenarios.map(() => []);
 
 
+// Start the simulation
 
-
-
-startBtn.addEventListener("click", function(){
+startBtn.addEventListener("click", function() {
 
     landing.style.display = "none";
 
-    accordion.style.display = "none";
+    if (accordion) {
+        accordion.style.display = "none";
+    }
+
+    app.style.display = "block";
+
+    currentScenario = 0;
 
     loadScenario();
 
 });
 
 
+// Load the selected scenario
 
-
-
-
-
-function loadScenario(){
-
-
-    exploredChoices = [];
-
+function loadScenario() {
 
     const scenario = scenarios[currentScenario];
 
-
     app.innerHTML = `
-
 
     <section class="simulation-card">
 
-
-
         <div class="journey-header">
-
 
             <div class="journey-title">
 
@@ -65,15 +65,11 @@ function loadScenario(){
 
             </div>
 
-
-
             <div class="journey-progress">
 
                 ${generateJourneyDots()}
 
             </div>
-
-
 
             <div class="scenario-stage">
 
@@ -83,11 +79,7 @@ function loadScenario(){
 
             </div>
 
-
         </div>
-
-
-
 
 
         <h2>
@@ -97,11 +89,7 @@ function loadScenario(){
         </h2>
 
 
-
-
-
         <div class="faculty-card">
-
 
             <div class="faculty-name">
 
@@ -109,14 +97,11 @@ function loadScenario(){
 
             </div>
 
-
             <div class="faculty-role">
 
                 ${scenario.faculty.role}
 
             </div>
-
-
 
             <p>
 
@@ -124,11 +109,7 @@ function loadScenario(){
 
             </p>
 
-
         </div>
-
-
-
 
 
         <h3 class="response-title">
@@ -138,14 +119,9 @@ function loadScenario(){
         </h3>
 
 
-
-
-
         <div class="choices">
 
-
-            ${scenario.choices.map((choice,index)=>`
-
+            ${scenario.choices.map((choice, index) => `
 
                 <button
 
@@ -155,201 +131,151 @@ function loadScenario(){
 
                     onclick="selectChoice(${index})">
 
-
                     ${choice.text}
-
 
                 </button>
 
-
             `).join("")}
-
 
         </div>
 
 
-
-
-
         <div id="feedback"></div>
-
-
 
     </section>
 
-
     `;
-
 
 }
 
 
+// Create clickable scenario navigation
+
+function generateJourneyDots() {
+
+    return scenarios.map((scenario, index) => {
+
+        const isCurrent = index === currentScenario;
+
+        const isCompleted = index < currentScenario;
+
+        const className =
+
+            isCurrent
+
+                ? "journey-dot active"
+
+                : isCompleted
+
+                    ? "journey-dot completed"
+
+                    : "journey-dot";
 
 
+        const label = isCompleted ? "✓" : index + 1;
 
+        return `
 
+            <button
 
+                type="button"
 
-function generateJourneyDots(){
+                class="${className}"
 
+                onclick="navigateToScenario(${index})"
 
-    return scenarios.map((scenario,index)=>{
+                aria-label="Go to scenario ${index + 1}"
 
+                aria-current="${isCurrent ? "step" : "false"}">
 
-        if(index < currentScenario){
+                ${label}
 
+            </button>
 
-            return `
-
-            <span class="journey-dot completed">
-
-                ✓
-
-            </span>
-
-            `;
-
-
-        }
-
-
-        else if(index === currentScenario){
-
-
-            return `
-
-            <span class="journey-dot active">
-
-                ${index + 1}
-
-            </span>
-
-            `;
-
-
-        }
-
-
-        else{
-
-
-            return `
-
-            <span class="journey-dot">
-
-                ${index + 1}
-
-            </span>
-
-            `;
-
-
-        }
-
+        `;
 
     }).join("");
 
 }
 
 
+// Navigate directly to any scenario
+
+function navigateToScenario(scenarioIndex) {
+
+    if (
+
+        scenarioIndex < 0 ||
+
+        scenarioIndex >= scenarios.length
+
+    ) {
+
+        return;
+
+    }
 
 
+    currentScenario = scenarioIndex;
+
+    loadScenario();
+
+}
 
 
+// Select an answer
 
-
-
-function selectChoice(choiceIndex){
-
-
+function selectChoice(choiceIndex) {
 
     const scenario = scenarios[currentScenario];
 
-
     const choice = scenario.choices[choiceIndex];
 
-
     const selectedButton =
-    document.getElementById(`choice-${choiceIndex}`);
 
-
-
+        document.getElementById(`choice-${choiceIndex}`);
 
 
     selectedButton.classList.add("selected");
 
 
+    const exploredChoices =
+
+        exploredChoicesByScenario[currentScenario];
 
 
+    // Only add trust the first time this answer is selected
 
-    if(!exploredChoices.includes(choiceIndex)){
-
-
+    if (!exploredChoices.includes(choiceIndex)) {
 
         exploredChoices.push(choiceIndex);
 
-
-
-        // Add both positive and negative values
-
         trustScore += choice.trust;
 
-
-
-        // Trust cannot go below zero
-
-        if(trustScore < 0){
-
-            trustScore = 0;
-
-        }
-
-
-
         updateTrustMeter();
-
 
     }
 
 
-
-
     selectedButton.innerHTML =
 
-    "✓ Explored: " + choice.text;
-
-
+        "✓ Explored: " + choice.text;
 
 
     showFeedback(choice);
 
-
-
 }
 
 
+// Show coaching feedback
 
+function showFeedback(choice) {
 
-
-
-
-
-
-function showFeedback(choice){
-
-
-
-    const feedback =
-    document.getElementById("feedback");
-
-
+    const feedback = document.getElementById("feedback");
 
     feedback.innerHTML = `
 
-
-
     <div class="feedback-card">
-
 
         <h3>
 
@@ -357,38 +283,25 @@ function showFeedback(choice){
 
         </h3>
 
-
-
         <p>
 
             ${choice.feedback}
 
         </p>
 
-
-
-
         <div class="trust-change">
 
-
             ${
+
                 choice.trust >= 0
 
-                ?
+                    ? "Trust Building: +" + choice.trust
 
-                "Trust Building: +" + choice.trust
-
-                :
-
-                "Trust Decrease: " + choice.trust
+                    : "Trust Decrease: " + choice.trust
 
             }
 
-
         </div>
-
-
-
 
         <button
 
@@ -396,172 +309,109 @@ function showFeedback(choice){
 
             onclick="nextScenario()">
 
-
             Continue to Next Scenario
-
 
         </button>
 
-
-
     </div>
 
-
-
     `;
-
-
 
 }
 
 
+// Update the Trust Meter
+
+function updateTrustMeter() {
+
+    const status = document.getElementById("trustStatus");
+
+    const fill = document.getElementById("trustFill");
+
+    const score = document.getElementById("trustScore");
 
 
-
-
-
-
-
-function updateTrustMeter(){
-
-
-
-    const status =
-    document.getElementById("trustStatus");
-
-
-    const fill =
-    document.getElementById("trustFill");
-
-
-
-
-    if(trustScore < 0){
+    if (trustScore < 0) {
 
         trustScore = 0;
 
     }
 
-
-
-    if(trustScore > maxTrust){
+    if (trustScore > maxTrust) {
 
         trustScore = maxTrust;
 
     }
 
 
-
-
-
     let label = "";
 
 
-
-
-
-    if(trustScore < 10){
-
+    if (trustScore < 10) {
 
         label = "🌱 Starting";
 
-
     }
 
-    else if(trustScore < 25){
-
+    else if (trustScore < 25) {
 
         label = "🌿 Building Rapport";
 
-
     }
 
-    else if(trustScore < 35){
-
+    else if (trustScore < 35) {
 
         label = "🤝 Collaborative Partner";
 
-
     }
 
-    else{
-
+    else {
 
         label = "⭐ Trusted Partner";
 
-
     }
-
-
-
 
 
     status.textContent = label;
 
+    score.textContent = trustScore;
 
 
     fill.style.width =
 
-    (trustScore / maxTrust * 100) + "%";
-
-
+        (trustScore / maxTrust * 100) + "%";
 
 }
 
 
+// Continue to the next scenario
 
+function nextScenario() {
 
+    if (currentScenario < scenarios.length - 1) {
 
-
-
-
-
-function nextScenario(){
-
-
-
-    currentScenario++;
-
-
-
-    if(currentScenario < scenarios.length){
-
+        currentScenario++;
 
         loadScenario();
 
-
     }
 
-    else{
-
+    else {
 
         showCompletion();
 
-
     }
-
-
 
 }
 
 
+// Completion page
 
-
-
-
-
-
-
-function showCompletion(){
-
-
+function showCompletion() {
 
     app.innerHTML = `
 
-
-
     <section class="simulation-card completion-card">
-
 
         <h2>
 
@@ -569,16 +419,11 @@ function showCompletion(){
 
         </h2>
 
-
-
         <p>
 
             You explored different approaches to building trust with faculty.
 
         </p>
-
-
-
 
         <h3>
 
@@ -586,60 +431,41 @@ function showCompletion(){
 
         </h3>
 
-
-
         <p>
 
             ${document.getElementById("trustStatus").textContent}
 
         </p>
 
+        <button
 
+            class="replay-btn"
 
-        <button class="replay-btn"
+            onclick="restartSimulation()">
 
-        onclick="restartSimulation()">
-
-        Replay
+            Replay
 
         </button>
 
-
-
     </section>
 
-
-
     `;
-
 
 }
 
 
+// Restart the simulation
 
-
-
-
-
-
-
-function restartSimulation(){
-
-
+function restartSimulation() {
 
     currentScenario = 0;
 
-
     trustScore = 0;
 
-
-    exploredChoices = [];
-
+    exploredChoicesByScenario = scenarios.map(() => []);
 
     updateTrustMeter();
 
-
     loadScenario();
-
 
 }
