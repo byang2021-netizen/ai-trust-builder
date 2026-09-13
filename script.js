@@ -232,6 +232,7 @@ function selectChoice(choiceIndex) {
         document.getElementById(`choice-${choiceIndex}`);
 
     selectedButton.classList.add("selected");
+     selectedButton.classList.add("explored");
 
     const exploredChoices =
         exploredChoicesByScenario[currentScenario];
@@ -242,8 +243,6 @@ function selectChoice(choiceIndex) {
         updateTrustMeter();
     }
 
-    selectedButton.innerHTML =
-        "✓ Explored: " + choice.text;
 
     showFeedback(choice);
 }
