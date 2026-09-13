@@ -225,42 +225,27 @@ function navigateToScenario(scenarioIndex) {
 // Select an answer
 
 function selectChoice(choiceIndex) {
-
     const scenario = scenarios[currentScenario];
-
     const choice = scenario.choices[choiceIndex];
 
     const selectedButton =
-
         document.getElementById(`choice-${choiceIndex}`);
-
 
     selectedButton.classList.add("selected");
 
-
     const exploredChoices =
-
         exploredChoicesByScenario[currentScenario];
 
-
-    // Only add trust the first time this answer is selected
-
     if (!exploredChoices.includes(choiceIndex)) {
-
         exploredChoices.push(choiceIndex);
-
         trustScore += choice.trust;
-
         updateTrustMeter();
-
     }
 
-    
-    selectedButton.classList.add("explored");
-
+    selectedButton.innerHTML =
+        "✓ Explored: " + choice.text;
 
     showFeedback(choice);
-
 }
 
 
