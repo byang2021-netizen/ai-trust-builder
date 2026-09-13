@@ -1460,3 +1460,12 @@ details[open] .summary-arrow {
 .choice.explored {
     border-color: var(--sage);
 }
+.choice.explored::before {
+    content: "✓";
+    background: var(--sage-soft);
+    color: var(--sage);
+}
+
+.choice.explored {
+    border-color: var(--sage);
+}

@@ -126,10 +126,9 @@ function loadScenario() {
                 <button
 
                     class="choice"
-
                     id="choice-${index}"
-
-                    onclick="selectChoice(${index})">
+                    data-letter="${String.fromCharCode(65 + index)}"
+                    onclick="selectChoice(${index})"
 
                     ${choice.text}
 
@@ -256,7 +255,7 @@ function selectChoice(choiceIndex) {
 
     }
 
-
+    selectedButton.classList.add("selected");
     selectedButton.classList.add("explored");
 
 
