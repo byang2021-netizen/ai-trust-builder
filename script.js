@@ -121,22 +121,21 @@ function loadScenario() {
 
         <div class="choices">
 
-            ${scenario.choices.map((choice, index) => `
+    ${scenario.choices.map((choice, index) => `
 
-                <button
+        <button
+            class="choice"
+            id="choice-${index}"
+            data-letter="${String.fromCharCode(65 + index)}"
+            onclick="selectChoice(${index})">
 
-                    class="choice"
-                    id="choice-${index}"
-                    data-letter="${String.fromCharCode(65 + index)}"
-                    onclick="selectChoice(${index})"
+            ${choice.text}
 
-                    ${choice.text}
+        </button>
 
-                </button>
+    `).join("")}
 
-            `).join("")}
-
-        </div>
+    </div>
 
 
         <div id="feedback"></div>
@@ -232,7 +231,7 @@ function selectChoice(choiceIndex) {
         document.getElementById(`choice-${choiceIndex}`);
 
     selectedButton.classList.add("selected");
-     selectedButton.classList.add("explored");
+     
 
     const exploredChoices =
         exploredChoicesByScenario[currentScenario];
@@ -242,7 +241,7 @@ function selectChoice(choiceIndex) {
         trustScore += choice.trust;
         updateTrustMeter();
     }
-
+    selectedButton.classList.add("explored");
 
     showFeedback(choice);
 }
