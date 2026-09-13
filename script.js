@@ -255,7 +255,7 @@ function selectChoice(choiceIndex) {
 
     }
 
-    selectedButton.classList.add("selected");
+    
     selectedButton.classList.add("explored");
 
 
